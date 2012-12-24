@@ -1,0 +1,37 @@
+
+
+img{
+	width: 10px;
+	margin: 10px auto;
+	/*display: none;*/
+
+}
+
+@media only screen and (max-width: 599px){
+
+	img{
+		width: 100px;
+	}
+}
+
+@media only screen and (min-width: 600px) and (max-width: 900px){
+	img{
+		width: 400px;
+	}
+}
+
+@media screen and (min-width: 901px){
+
+	img{
+		width:700px;
+	}
+
+	.head ul,li{
+		display: inline;
+		list-style: none;
+	}
+	.head img{
+		width: 300px;
+		height: 200px;
+	}
+}
