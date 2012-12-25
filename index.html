@@ -5,6 +5,17 @@
 		<title>Mobile Traffic Reducer v0.01a</title>
 		<link rel="stylesheet" href="style.css" type="text/css"/>
 		<meta name="viewport" content="initial-scale = 1.0, width=device-width, minimum-scale=1.0">
+
+		<!--[if lte IE 8]>
+		<script type="text/javascript" src="respond.min.js"></script>
+		<script type="text/javascript" src="matchMedia.addListener.min.js"></script>
+		<![endif]-->
+
+		<!--[if IE 9]>
+		<script type="text/javascript" src="matchMedia.min.js"></script>
+		<script type="text/javascript" src="matchMedia.addListener.min.js"></script>
+		<![endif]-->
+
 	</head>
 	<body>
 		<div class="container">
@@ -40,7 +51,7 @@
 			//	%e = extension
 			//	default value is FineName + x + width + .Extension
 
-			//requestType : "%f.%e?width=%wpx",
+			requestType : "%f.%e?width=%wpx",
 
 			//autoReload : Boolean
 			//	Reload bigger image when Media Query define larger than current width 
