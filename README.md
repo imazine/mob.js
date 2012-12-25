@@ -33,7 +33,9 @@
 		mob.config = {
 			requestType : "%fx%w.%e",
 				/*requestType : expression
-				default value is FineName + x + width + .Extension -- ex> FileNamex700.png
+				for example FileName.png defined width: 700px;(예시)
+				default> "%fx%w.%e" --> FileNamex700.png
+				ex> "http://url/imgServer?fn=%f.%e&width=%wpx" --> http://url/imgServer?fn=FileName.png&width=700px
 				%f = File Name (파일 이름으로 치환)
 				%w = width value catched CSS (CSS 에 정의된 넓이로 치환)
 				%e = extension (파일 확장자로 치환) */
