@@ -16,7 +16,7 @@
 > 1. Include js file to your HTML (js파일을 HTML에 넣어줍니다)
 
 >  ```HTML 
-<script type="text/javascript" src="https:/"></script> 
+<script type="text/javascript" src="https://raw.github.com/imazine/mob.js/master/mob.min.js"></script> 
 ```
 
 > 2. Mark up img Tag with __data-src__ (img 태그 작성시 __data-src__ 를 사용합니다)
