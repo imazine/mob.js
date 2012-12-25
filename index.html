@@ -1,11 +1,10 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-	    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<title>Mobile Traffic Reducer v0.01a</title>
 		<link rel="stylesheet" href="style.css" type="text/css"/>
 		<meta name="viewport" content="initial-scale = 1.0, width=device-width, minimum-scale=1.0">
-		
 	</head>
 	<body>
 		<div class="container">
@@ -13,30 +12,28 @@
 				<h1>This is header</h1>
 				<div class="testdiv">
 					<ul>
-						<li><img data-src="/img/sample001.jpg" alt="sample001"/></li>
-						<li><img data-src="/img/sample002.jpg" alt="sample002"/></li>
+						<li><img data-src="./img/sample001.jpg" alt="sample001"/></li>
+						<li><img data-src="./img/sample002.jpg" alt="sample002"/></li>
 					</ul>
 				</div>
 			</div>
 			<div class="contents">
 				<h1>This is body</h1>
-				<img data-src="/img/sample003.jpg" alt="sample003"/>
-				<img data-src="/img/sample004.jpg" alt="sample004"/>
-				<img data-src="/img/sample005.jpg" alt="sample005"/>
+				<img data-src="./img/sample003.jpg" alt="sample003"/>
+				<img data-src="./img/sample004.jpg" alt="sample004"/>
+				<img data-src="./img/sample005.jpg" alt="sample005"/>
 			</div>
 			<div class="footer">
 				<h1>This is Footer</h1>
-				<img data-src="/img/sample006.jpg" alt="sample006"/>
+				<img data-src="./img/sample006.jpg" alt="sample006"/>
 			</div>
 		</div>
-		
 	</body>
-	<script type="text/javascript" src="mob.min.js"></script>
+	<script type="text/javascript" src="mob.js"></script>
 	<script type="text/javascript">
-
 		// mob.config is not a precondition
 		mob.config = {
-			
+
 			//requestType : expression
 			//	%f = File Name
 			//	%w = width catched CSS
@@ -45,20 +42,15 @@
 
 			//requestType : "%f.%e?width=%wpx",
 
-
 			//autoReload : Boolean
 			//	Reload bigger image when Media Query define larger than current width 
 			//	default value is true 
 
 			//autoReload : true
-
 		}
-
 
 		//mob.init() is mob trigger. 
 		//recommanded after document load. 
 		mob.init();
-
 	</script>
-
 </html>
