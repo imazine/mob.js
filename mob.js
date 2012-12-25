@@ -5,7 +5,7 @@
 	CopyRight : 2012. GPL v2 & MIT dual License.
 
 	Release Note
-		
+
 		v0.1b
 			- adding mob.config to be configure.
 			- image request expression.
@@ -14,7 +14,6 @@
 		v0.01 alpha
 			- Intergrate Image Post-Loader.
 */
-
 
 if(window.console === undefined){console = {log:function(){}};} //console.log disable for IE
 
@@ -25,7 +24,7 @@ if(window.console === undefined){console = {log:function(){}};} //console.log di
 	
 	mob = {
 		version : '0.1b',
-		objArr : document.getElementsByTagName('img'),
+		objArr : d.getElementsByTagName('img'),
 
 		init : function(){
 			this.imgLength = this.objArr.length;
@@ -36,10 +35,10 @@ if(window.console === undefined){console = {log:function(){}};} //console.log di
 		},
 
 		addLisn : function(){
-			for (var i = sLength - 1; i >= 0; i--) {
+			for (var i = sLength; i--;) {
 				var r = s[i].cssRules,
 					rLength = r.length;
-				for (var j = rLength - 1; j >= 0; j--) {
+				for (var j = rLength; j--;) {
 					if(r[j].constructor == CSSMediaRule){
 						var a = r[j].media.mediaText,
 						b = this["mediaQuery" + j] = window.matchMedia(a);
@@ -50,7 +49,7 @@ if(window.console === undefined){console = {log:function(){}};} //console.log di
 		},
 
 		getAttr : function(){
-			for (var i = this.imgLength -1; i >= 0; i--){
+			for (var i = this.imgLength; i--;){
 				var a = this.objArr[i],
 					b = a.getAttribute('data-src'),
 					exec = /(?:\.([^.]+))?$/;
@@ -66,7 +65,7 @@ if(window.console === undefined){console = {log:function(){}};} //console.log di
 		mob : function(arg){
 			var a = {},
 				w = window;
-			for (var i = mob.imgLength - 1; i >= 0; i--) {
+			for (var i = mob.imgLength; i--;) {
 				var o = mob.objArr[i],
 					d = mob.objArr[i].dataset;
 				a.width = parseFloat(w.getComputedStyle(o).width);
@@ -81,7 +80,6 @@ if(window.console === undefined){console = {log:function(){}};} //console.log di
 					o.addEventListener('onerror',o.setAttribute('src',o.dataset.src));
 					console.log(f + ' -- loaded');
 				}
-					
 			}
 		}
 	};
