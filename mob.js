@@ -26,7 +26,7 @@ if(window.console === undefined){console = {log:function(){}};} //console.log di
 		sLength = s.length;
 	
 	mob = {
-		version : '0.1b',
+		version : '0.2b',
 		objArr : d.getElementsByTagName('img'),
 
 		init : function(){
