@@ -46,7 +46,7 @@
 			retinaSupport : true
 				/*retinaSupport : Boolean
 				Detect Retina-Display and request double of image width
-				(레티나 디스플레이를 적용합니다) */
+				(레티나 디스플레이를 지원) */
 		}  
 		mob.init(); //pull the trigger. (트리거를 실행합니다)
 	</script> 
