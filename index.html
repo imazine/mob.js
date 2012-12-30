@@ -21,6 +21,10 @@
 		<div class="container">
 			<div class="head">
 				<h1>This is header</h1>
+<<<<<<< HEAD
+=======
+				<p id="test"></p>
+>>>>>>> master
 				<div class="testdiv">
 					<ul>
 						<li><img data-src="./img/sample001.jpg" alt="sample001"/></li>
@@ -42,6 +46,7 @@
 	</body>
 	<script type="text/javascript" src="mob.js"></script>
 	<script type="text/javascript">
+<<<<<<< HEAD
 		// mob.config is not a precondition
 		mob.config = {
 
@@ -63,5 +68,25 @@
 		//mob.init() is mob trigger. 
 		//recommanded after document load. 
 		mob.init();
+=======
+    // mob.config is not a precondition.
+		mob.config = {
+			requestType : "%fx%w.%e",
+				/*requestType : expression
+				for example FileName.png defined width: 700px;(예시)
+				default> "%fx%w.%e" --> FileNamex700.png
+				ex> "http://url/imgServer?fn=%f.%e&width=%wpx" --> http://url/imgServer?fn=FileName.png&width=700px
+				%f = File Name
+				%w = width value catched CSS
+				%e = extension */ 
+			autoReload : true,
+				/*autoReload : Boolean
+				Reload image when Media Query defines larger than current image width */
+			retinaSupport : true
+				/*retinaSupport : Boolean
+				Detect Retina-Display and request double of image width */
+		}  
+		mob.init(); //pull the trigger.
+>>>>>>> master
 	</script>
 </html>

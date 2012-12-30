@@ -6,6 +6,12 @@
 
 	Release Note
 
+<<<<<<< HEAD
+=======
+		v0.3b
+			- support Retina Display
+
+>>>>>>> master
 		v0.2b
 			- support IE
 
@@ -23,16 +29,28 @@ if(window.console === undefined){console = {log:function(){}};} //console.log di
 (function(){
 	var d = document,
 		s = d.styleSheets,
+<<<<<<< HEAD
 		sLength = s.length;
 	
 	mob = {
 		version : '0.2b',
+=======
+		retina = window.devicePixelRatio > 1 ? 2: 1;
+		sLength = s.length;
+	
+	mob = {
+		version : '0.3b',
+>>>>>>> master
 		objArr : d.getElementsByTagName('img'),
 
 		init : function(){
 			this.imgLength = this.objArr.length;
 			this.config.requestType = typeof this.config.requestType == 'string' ? this.config.requestType : '%fx%w.%e';
 			if(typeof mob.config.autoReload == 'undefined' || mob.config.autoReload === true)this.addLisn();
+<<<<<<< HEAD
+=======
+			this.config.retina = this.config.retinaDisplay === true ? retina : 1; 
+>>>>>>> master
 			this.getAttr();
 			this.mob(true);
 		},
@@ -80,7 +98,11 @@ if(window.console === undefined){console = {log:function(){}};} //console.log di
 					d.width = a.width;
 					var f = mob.config.requestType,
 						s = typeof d.fileName == 'object' ? d.fileName : d.fileName.split(',');
+<<<<<<< HEAD
 					f = f.replace('%f',s[0]).replace('%w',a.width).replace('%e',s[1]);
+=======
+					f = f.replace('%f',s[0]).replace('%w',a.width*this.config.retina).replace('%e',s[1]);
+>>>>>>> master
 					o.setAttribute('src',f);
 					o.addEventListener('onerror',o.setAttribute('src',d.origin));
 					console.log(f + ' -- loaded');
