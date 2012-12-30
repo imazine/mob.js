@@ -6,7 +6,7 @@
 
 	Release Note
 
-		v0.b
+		v03.b
 			- support Retina Display
 
 		v0.2b
