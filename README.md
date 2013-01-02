@@ -38,11 +38,15 @@
 				ex> "http://url/imgServer?fn=%f.%e&width=%wpx" --> http://url/imgServer?fn=FileName.png&width=700px
 				%f = File Name (파일 이름으로 치환)
 				%w = width value catched CSS (CSS 에 정의된 넓이로 치환)
-				%e = extension (파일 확장자로 치환) */
+				%e = extension (파일 확장자로 치환) */ 
 			autoReload : true
 				/*autoReload : Boolean
 				Reload image when Media Query defines larger than current image width 
 				(미디어 쿼리가 현재보다 큰 이미지폭을 설정하면 자동으로 이미지를 로드) */
+			retinaSupport : true
+				/*retinaSupport : Boolean
+				Detect Retina Display and request double of image width
+				(레티나 디스플레이를 지원) */
 		}  
 		mob.init(); //pull the trigger. (트리거를 실행합니다)
 	</script> 
