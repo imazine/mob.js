@@ -37,7 +37,7 @@ if(window.console === undefined){console = {log:function(){}};} //console.log di
 			this.imgLength = this.objArr.length;
 			this.config.requestType = typeof this.config.requestType == 'string' ? this.config.requestType : '%fx%w.%e';
 			if(typeof mob.config.autoReload == 'undefined' || mob.config.autoReload === true)this.addLisn();
-			this.config.retina = this.config.retinaDisplay === true ? retina : 1; 
+			this.config.retina = this.config.retinaDisplay === true ? retina : 1;
 			this.getAttr();
 			this.mob(true);
 		},
