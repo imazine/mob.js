@@ -15,6 +15,9 @@ window.matchMedia=window.matchMedia||function(doc,undefined){var bool,docElem=do
 
 	Release Note
 		
+		v0.4.01
+			- add polyfills for old Bowser(andriod & IE)
+
 		v0.4 (Mile Stone)
 			- support LazyLoad
 			- rebuild construct
