@@ -1,3 +1,12 @@
+/*! matchMedia() polyfill - Test a CSS media type/query in JS. Authors & copyright (c) 2012: Scott Jehl, Paul Irish, Nicholas Zakas. Dual MIT/BSD license */
+/*! NOTE: If you're already including a window.matchMedia polyfill via Modernizr or otherwise, you don't need this part */
+window.matchMedia=window.matchMedia||function(doc,undefined){var bool,docElem=doc.documentElement,refNode=docElem.firstElementChild||docElem.firstChild,fakeBody=doc.createElement("body"),div=doc.createElement("div");div.id="mq-test-1";div.style.cssText="position:absolute;top:-100em";fakeBody.style.background="none";fakeBody.appendChild(div);return function(q){div.innerHTML='&shy;<style media="'+q+'"> #mq-test-1 { width: 42px; }</style>';docElem.insertBefore(fakeBody,refNode);bool=div.offsetWidth==
+42;docElem.removeChild(fakeBody);return{matches:bool,media:q}}}(document);
+
+/*! matchMedia() polyfill addListener/removeListener extension. Author & copyright (c) 2012: Scott Jehl. Dual MIT/BSD license */
+(function(){if(!window.matchMedia("").addListener){var oldMM=window.matchMedia;window.matchMedia=function(q){var ret=oldMM(q),listeners=[],last=false,timer,check=function(){var list=oldMM(q),unmatchToMatch=list.matches&&!last,matchToUnmatch=!list.matches&&last;if(unmatchToMatch||matchToUnmatch)for(var i=0,il=listeners.length;i<il;i++)listeners[i].call(ret,list);last=list.matches};ret.addListener=function(cb){listeners.push(cb);if(!timer)timer=setInterval(check,1E3)};ret.removeListener=function(cb){for(var i=
+0,il=listeners.length;i<il;i++)if(listeners[i]===cb)listeners.splice(i,1);if(!listeners.length&&timer)clearInterval(timer)};return ret}}})();
+
 /*
 	mob.js is Post Image Loader for reducing traffic on the Responsive Web.
 
@@ -77,8 +86,12 @@ if(window.console === undefined){console = {log:function(){}};} //Prevent IE con
 
 		init : function(){
 			var config = this.config;
-			if (config.lazyLoad)window.addEventListener('scroll',function(){mob.setShowBooks();});
-			if (config.autoReload)this.addMQListener();
+			if (config.lazyLoad){
+				window.addEventListener('scroll',function(){mob.setShowBooks();});
+			}
+			if (config.autoReload){
+				this.addMQListener();
+			}
 			this.refresh();
 		},
 
@@ -176,15 +189,15 @@ if(window.console === undefined){console = {log:function(){}};} //Prevent IE con
 		addMQListener : function(){
 			var sheet = document.styleSheets;
 			for (var i = sheet.length; i--;) {
-				var rules = sheet[i].cssRules ,
+				var rules = sheet[i].cssRules,
 					rLength = rules.length;
 				for (var j = rLength; j--;) {
-					if(rules[j].constructor == CSSMediaRule){
-						var mText = rules[j].media.mediaText,
+					if(rules[j].media !== undefined){
+						var mText = rules[j].media.mediaText;
 						eventObject = this["mediaQuery" + j] = window.matchMedia(mText);
-						eventObject.addListener(function(){
-							mob.resetBooks();
-						});
+								eventObject.addListener(function(){
+								mob.resetBooks();
+							});
 					}
 				}
 			}
@@ -221,7 +234,7 @@ if(window.console === undefined){console = {log:function(){}};} //Prevent IE con
 	}
 
 	function setTransition(elem,prop){
-		console.log(prop);
+		// console.log(prop);
 		elem.style.MozTransition = prop;
 		elem.style.webkitTransition = prop;
 		elem.style.msTransition = prop;
