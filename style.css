@@ -1,22 +1,45 @@
-
-
+body{
+	text-align: left;
+}
+h1{
+	clear: both;
+}
 img{
-	width: 10px;
 	margin: 10px auto;
+	/*opacity: 0;*/
 	/*display: none;*/
 
+}
+
+.test{
+	display: none;
+	font-size: 30px;
 }
 
 @media only screen and (max-width: 599px){
 
 	img{
-		width: 100px;
+		min-height: 2px;
+		min-width: 100px;
+		max-width: 100px;
+		/*float: left;*/
+		display: inline-block;
+	}
+
+	.head ul,li{
+		display: block;
 	}
 }
 
 @media only screen and (min-width: 600px) and (max-width: 900px){
 	img{
 		width: 400px;
+		min-height: 160px;
+		display: block;
+	}
+
+	.testDiv ul, .testDiv li{
+		display: block;
 	}
 }
 
@@ -24,6 +47,7 @@ img{
 
 	img{
 		width:700px;
+		min-height: 220px;
 	}
 
 	.head ul,li{

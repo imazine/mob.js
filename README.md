@@ -45,8 +45,8 @@
 				(미디어 쿼리가 현재보다 큰 이미지폭을 설정하면 자동으로 이미지를 로드) */
 			retinaSupport : true
 				/*retinaSupport : Boolean
-				Detect Retina-Display and request double of image width
-				(레티나 디스플레이를 적용합니다) */
+				Detect Retina Display and request double of image width
+				(레티나 디스플레이를 지원) */
 		}  
 		mob.init(); //pull the trigger. (트리거를 실행합니다)
 	</script> 
