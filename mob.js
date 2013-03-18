@@ -231,4 +231,8 @@ if(window.console === undefined){console = {log:function(){}};} //Prevent IE con
 
 	window.addEventListener('load', function(){mob.touch();});
 
+<<<<<<< HEAD
 })();
+=======
+})();
+>>>>>>> f7d1b2d... mob v0,4
