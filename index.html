@@ -1,8 +1,9 @@
+<!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<title>Mobile Traffic Reducer v0.01a</title>
+		<title>mob.js - mobile traffic reducer v0.4</title>
 		<link rel="stylesheet" href="style.css" type="text/css"/>
 		<meta name="viewport" content="initial-scale = 1.0, width=device-width, minimum-scale=1.0">
 
@@ -21,47 +22,48 @@
 		<div class="container">
 			<div class="head">
 				<h1>This is header</h1>
+				<p id="test"></p>
 				<div class="testdiv">
 					<ul>
-						<li><img data-src="./img/sample001.jpg" alt="sample001"/></li>
-						<li><img data-src="./img/sample002.jpg" alt="sample002"/></li>
+						<li><img data-src="http://www.unioh.com/images/sample001.jpg" alt="sample001"/></li>
+						<li><img data-src="http://unioh.com/images/sample002.jpg" alt="sample002"/></li>
 					</ul>
 				</div>
 			</div>
 			<div class="contents">
 				<h1>This is body</h1>
-				<img data-src="./img/sample003.jpg" alt="sample003"/>
-				<img data-src="./img/sample004.jpg" alt="sample004"/>
-				<img data-src="./img/sample005.jpg" alt="sample005"/>
+				<img data-src="http://unioh.com/images/sample003.jpg" alt="sample003"/>
+				<img data-src="http://unioh.com/images/sample004.jpg" alt="sample004"/>
+				<img data-src="http://unioh.com/images/sample005.jpg" alt="sample005" class="test"/>
 			</div>
 			<div class="footer">
 				<h1>This is Footer</h1>
-				<img data-src="./img/sample006.jpg" alt="sample006"/>
+				<img data-src="http://unioh.com/images/sample006.jpg" alt="sample006"/>
 			</div>
 		</div>
 	</body>
-	<script type="text/javascript" src="mob.js"></script>
+	<script type="text/javascript" src="mob.min.js"></script>
 	<script type="text/javascript">
-		// mob.config is not a precondition
+    // mob.config is not a precondition.
 		mob.config = {
-
-			//requestType : expression
-			//	%f = File Name
-			//	%w = width catched CSS
-			//	%e = extension
-			//	default value is FineName + x + width + .Extension
-
-			requestType : "%fx%w.%e",
-
-			//autoReload : Boolean
-			//	Reload bigger image when Media Query define larger than current width 
-			//	default value is true 
-
-			//autoReload : true
-		}
-
-		//mob.init() is mob trigger. 
-		//recommanded after document load. 
-		mob.init();
+			// autoStart : true,
+				// autoStart : Boolean true is default.
+				// auto Start mob.js without trigger.
+			requestType : "%f.%e?x=%w&y=%h",
+				// requestType : expression
+				// for example FileName.png defined width: 700px;(예시) default> "%fx%w.%e" --> FileNamex700.png
+				// ex> "http://url/imgServer?fn=%f.%e&width=%wpx" --> http://url/imgServer?fn=FileName.png&width=700px
+				// %f = File Name
+				// %w = width value catched CSS
+				// %h = height Value catched CSS
+				// %e = extension */ 
+			autoReload : true,
+				/*autoReload : Boolean true is default.
+				Reload image when Media Query defines larger than current image width */
+			retinaSupport : false
+				/*retinaSupport : Boolean false is default.
+				Detect Retina-Display and request double of image width */
+		}  
+		// mob.init(); //pull the trigger.
 	</script>
 </html>
