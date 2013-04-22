@@ -19,8 +19,6 @@ img{
 @media only screen and (max-width: 599px){
 
 	img{
-		min-height: 2px;
-		min-width: 100px;
 		max-width: 100px;
 		/*float: left;*/
 		display: inline-block;
@@ -34,7 +32,6 @@ img{
 @media only screen and (min-width: 600px) and (max-width: 900px){
 	img{
 		width: 400px;
-		min-height: 160px;
 		display: block;
 	}
 
@@ -45,11 +42,6 @@ img{
 
 @media screen and (min-width: 901px){
 
-	img{
-		width:700px;
-		min-height: 220px;
-	}
-
 	.head ul,li{
 		display: inline;
 		list-style: none;
@@ -57,5 +49,15 @@ img{
 	.head img{
 		width: 300px;
 		height: 200px;
+	}
+
+	.contents img{
+		width:700px;
+		min-height: 400px;
+		height: auto;
+	}
+
+	.footer img{
+		width: 900px;
 	}
 }

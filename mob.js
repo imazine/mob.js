@@ -14,6 +14,8 @@ window.matchMedia=window.matchMedia||function(doc,undefined){var bool,docElem=do
 	CopyRight : 2012~ GPL v2 & MIT dual License.
 
 	Release Note
+		v0.5
+			- Improve Lazyload Performance
 		
 		v0.4.01
 			- add polyfills for old Bowser(andriod & IE)
@@ -43,6 +45,8 @@ window.matchMedia=window.matchMedia||function(doc,undefined){var bool,docElem=do
 
 if(window.console === undefined){console = {log:function(){}};} //Prevent IE console.log Error
 
+var mob = {} || mob;
+
 (function() {
 	var doc = document,
 		sheet = doc.styleSheets;
@@ -51,14 +55,17 @@ if(window.console === undefined){console = {log:function(){}};} //Prevent IE con
 	// define mob object
 	// -----------------
 	mob = {
-		version : '0.4',
+		name : 'mob.js',
+		version : '0.5',
 		defaults : {
 			requestType : "%fx%w.%e",
 			autoStart : true,
 			autoReload : true,
 			retinaSupport : false,
-			offsetHeight : '200px',
-			offsetWidth : '200px',
+			offsetHeight : 100,
+			offsetWidth : 100,
+			minHeight : 200,
+			minWidth : 200,
 			lazyLoad : true
 		},
 		scrollTimer : false,
@@ -105,10 +112,11 @@ if(window.console === undefined){console = {log:function(){}};} //Prevent IE con
 				var file = temp[i].getAttribute('data-src');
 				if(file !== null){
 					temp[i]._file = file.split(/(?:\.([^.]+))?$/);
-					var offsetHeight = temp[i].style.minHeight,
-						offsetWidth = temp[i].style.minWidth;
-					temp[i].style.minHeight = offsetHeight === undefined ? this.config.offsetHeight : offsetHeight;
-					temp[i].style.minWidth = offsetWidth === undefined ? this.config.offsetWidth : offsetWidth;
+					var minHeight = getComputed(temp[i], 'minHeight'),
+						minWidth = getComputed(temp[i], 'minWidth');
+					temp[i].style.minHeight = minHeight === '' ? this.config.minHeight + 'px': minHeight;
+					temp[i].style.minWidth = minWidth === '' ? this.config.minWidth + 'px' : minWidth;
+					temp[i].style.opacity = 0;
 					this.__basket.push(temp[i]);
 				}
 			}
@@ -118,7 +126,6 @@ if(window.console === undefined){console = {log:function(){}};} //Prevent IE con
 		resetBooks : function() {
 			this.__preventEvent = toggle(this.__preventEvent);
 			if(this.__preventEvent === false){
-				var count = 0;
 				this.__book = [];			// Clear booked Container
 				for (var i = this.__basket.length; i--;){
 					var elem = this.__basket[i];
@@ -127,10 +134,9 @@ if(window.console === undefined){console = {log:function(){}};} //Prevent IE con
 						temp._height = getComputed(elem,'height',true),
 						temp._display = getComputed(elem,'display');
 					if((elem._width === undefined || elem._height === undefined || temp._width > elem._width || temp._height > elem._height) && temp._display !== 'none'){
+						elem.position = elem.getBoundingClientRect();
 						elem._width = temp._width,
 						elem._height = temp._height;
-						elem._basketNumber = i;
-						elem._number = count++;
 						this.__book.push(elem);
 					}
 				}
@@ -144,21 +150,26 @@ if(window.console === undefined){console = {log:function(){}};} //Prevent IE con
 				this.__viewportHeight = getViewport('clientHeight');
 				this.__viewportWidth = getViewport('clientWidth');
 				redirection = 'checkPosition';
-			};
-			for (var i = 0; i <= this.__book.length-1; i++) {
-				if(this.__book[i] !== undefined)this[redirection](this.__book[i]);
+				this.bodyRect = document.body.getBoundingClientRect();
 			}
-
+			// console.time('lazyload performance');
+			for (var i = 0; i <= this.__book.length-1; i++) {
+				if(this.__book[i] !== undefined){
+					this[redirection](this.__book[i]);
+				}
+			}
+			// console.timeEnd('lazyload performance');
 			function getViewport(prop){
 				return Math.min(document.body[prop],document.documentElement[prop]);
 			}
 		},
 
 		checkPosition : function(elem){
-			var rect = elem.getBoundingClientRect();
-			if(rect.top <= this.__viewportHeight + 200 && rect.left <= this.__viewportWidth){
+			var position = elem.position,
+				bodyRect = this.bodyRect;
+			setTransition(elem, 'opacity ease 0.6s');
+			if(position.top + bodyRect.top <= this.__viewportHeight && position.left + bodyRect.left <= this.__viewportWidth){
 				this.showElement(elem);
-			}else{
 			}
 		},
 
@@ -166,27 +177,25 @@ if(window.console === undefined){console = {log:function(){}};} //Prevent IE con
 			var request = this.config.requestType,
 				file = elem._file,
 				width = Math.ceil(this.config.DPR * elem._width),
-				height = Math.ceil(this.config.DPR * elem._height);
-			elem.src = request.replace('%f',file[0]).replace('%w',width).replace('%h',height).replace('%e',file[1]);
-
-			setTransition(elem, 'opacity ease 2s');
-			elem.style.opacity = 0;
-			elem.addEventListener('load',function(){mob.setAttribute(this);});
-			elem.addEventListener('error',function(){
-				delete window.mob.__book[this._number];
-				console.log("Can't load - " + this._file[0]+'.'+this._file[1]);
-			});
-
+				height = Math.ceil(this.config.DPR * elem._height),
+				src = request.replace('%f',file[0]).replace('%w',width).replace('%h',height).replace('%e',file[1]);
+			if(elem.src!==src){
+				elem.src = src;
+				elem.addEventListener('load',function(){mob.setAttribute(this);});
+				elem.addEventListener('error',function(e){
+					console.log(e.status + "Can't load - " + this._file[0]+'.'+this._file[1]);
+					var bookIndex = mob.__book.indexOf(elem);
+					if(bookIndex >= 0)mob.__book.splice(bookIndex , 1);
+				});
+			}
 
 		},
 
 		setAttribute : function(elem){
-			setTransition(elem, 'opacity ease 1s');
 			elem.style.opacity = 1;
-			var basketNumber = elem._basketNumber;
-			this.__basket[basketNumber]._height = getComputed(elem,'height', true);
-			this.__basket[basketNumber]._width = getComputed(elem,'width', true);
-			delete this.__book[elem._number];
+			var basketIndex = this.__basket.indexOf(elem);
+			var bookIndex = this.__book.indexOf(elem);
+			if(bookIndex >= 0)this.__book.splice(bookIndex , 1);
 		},
 
 		addMQListener : function(){
@@ -210,8 +219,10 @@ if(window.console === undefined){console = {log:function(){}};} //Prevent IE con
 		// Add Event Handler End of scroll
 		// -------------------------------
 		setShowBooks : function(){
-			clearTimeout(this.scrollTimer);
-			this.scrollTimer = setTimeout(function(){mob.showBooks();},200);
+			if(this.__book.length){
+				clearTimeout(this.scrollTimer);
+				this.scrollTimer = setTimeout(function(){mob.showBooks();},150);
+			}
 		}
 
 	};
@@ -237,9 +248,8 @@ if(window.console === undefined){console = {log:function(){}};} //Prevent IE con
 	}
 
 	function setTransition(elem,prop){
-		// console.log(prop);
-		elem.style.MozTransition = prop;
 		elem.style.webkitTransition = prop;
+		elem.style.MozTransition = prop;
 		elem.style.msTransition = prop;
 		elem.style.OTransition = prop;
 		elem.style.transition = prop;
