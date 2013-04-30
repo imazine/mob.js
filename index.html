@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<title>mob.js - mobile traffic reducer v0.5</title>
+		<title>mob.js - mobile traffic reducer v0.6</title>
 		<link rel="stylesheet" href="style.css" type="text/css"/>
 		<meta name="viewport" content="initial-scale = 1.0, width=device-width, minimum-scale=1.0">
 
@@ -17,7 +17,7 @@
 	</head>
 	<body>
 		<div class="container">
-			<div class="head">
+			<div class="head" id="header">
 				<h1>This is header</h1>
 				<p id="test"></p>
 				<div class="testdiv">
@@ -27,7 +27,7 @@
 					</ul>
 				</div>
 			</div>
-			<div class="contents">
+			<div class="contents" id="tester">
 				<h1>This is body</h1>
 				<img data-src="http://unioh.com/images/sample003.jpg" alt="sample003"/>
 				<img data-src="http://unioh.com/images/sample004.jpg" alt="sample004"/>
@@ -44,7 +44,7 @@
 			</div>
 		</div>
 	</body>
-	<script type="text/javascript" src="mob.js"></script>
+	<script type="text/javascript" src="mob.min.js"></script>
 	<script type="text/javascript">
     // mob.config is not a precondition.
 		mob.config = {

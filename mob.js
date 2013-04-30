@@ -15,6 +15,9 @@ window.matchMedia=window.matchMedia||function(doc,undefined){var bool,docElem=do
 
 	Release Note
 
+		v0.6
+			- add register API for AJAX workflow.
+
 		v0.51
 			- Include alternative base64 encoded GIF Image (16 : 10)
 
@@ -60,7 +63,7 @@ var mob = {} || mob;
 	// -----------------
 	mob = {
 		name : 'mob.js',
-		version : '0.51',
+		version : '0.6',
 		defaults : {
 			requestType : "%fx%w.%e",
 			autoStart : true,
@@ -110,30 +113,43 @@ var mob = {} || mob;
 			this.refresh();
 		},
 
+
+		// Refresh and register All image Elements
+		// You can call mob.refresh() anywhere.
 		refresh : function () {
 			this.__basket = [];		// Clear Basket Container
-			var temp = doc.getElementsByTagName('img');
+			this.register(doc);
+		},
+
+		// Adding new image elements works with mob.js
+		// @obj = Container Elements has images. 
+		register : function(obj) {
+			var temp = obj.getElementsByTagName('img');
 			for (var i = temp.length;  i--;){
 				var file = temp[i].getAttribute('data-src'),
 					alterImg = temp[i].src;
-				if(file !== null){
+				if (file !== null){
 					temp[i]._file = file.split(/(?:\.([^.]+))?$/);
 					var minHeight = getComputed(temp[i], 'minHeight'),
 						minWidth = getComputed(temp[i], 'minWidth');
-					temp[i].style.minHeight = minHeight === '' ? this.config.minHeight + 'px': minHeight;
-					temp[i].style.minWidth = minWidth === '' ? this.config.minWidth + 'px' : minWidth;
+					temp[i].style.minHeight = parseFloat(minHeight) < 1 ? this.config.minHeight + 'px': minHeight;
+					temp[i].style.minWidth = parseFloat(minWidth) < 1 ? this.config.minWidth + 'px' : minWidth;
 					temp[i].src = alterImg === '' ? this.config.alterImg : alterImg;
 					temp[i].style.opacity = 0.2;
 					this.__basket.push(temp[i]);
 				}
 			}
-			this.resetBooks();
+			this.addBooks(true);
 		},
 
 		resetBooks : function() {
+			this.__book = [];			// Clear booked Container
 			this.__preventEvent = toggle(this.__preventEvent);
-			if(this.__preventEvent === false){
-				this.__book = [];			// Clear booked Container
+			this.addBooks(this.__preventEvent);
+		},
+
+		addBooks : function(prevent) {
+			if(prevent){
 				for (var i = this.__basket.length; i--;){
 					var elem = this.__basket[i];
 					var temp = {};
@@ -238,12 +254,12 @@ var mob = {} || mob;
 	// getComputed (@elem, @prop, @isNumber)
 	// returning computedStyle function
 	// @elem = target element object 
-	// @prop = return property string
+	// @prop = property string
 	// @isNumber = boolean for Number format
 	// --------------------------------------------------------
 	function getComputed(elem, prop, isNumber) {
 		var returnValue = window.getComputedStyle(elem)[prop];
-		return returnValue = isNumber === true ? +parseFloat(returnValue) || 0 : returnValue;
+		return returnValue = isNumber === true ? + parseFloat(returnValue) || 0 : returnValue;
 	}
 
 	function bindResetBooks(){
