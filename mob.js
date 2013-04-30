@@ -14,6 +14,15 @@ window.matchMedia=window.matchMedia||function(doc,undefined){var bool,docElem=do
 	CopyRight : 2012~ GPL v2 & MIT dual License.
 
 	Release Note
+
+		v0.6
+			- add register API for AJAX workflow.
+
+		v0.51
+			- Include alternative base64 encoded GIF Image (16 : 10)
+
+		v0.5
+			- Improve Lazyload Performance
 		
 		v0.4.01
 			- add polyfills for old Bowser(andriod & IE)
@@ -43,6 +52,8 @@ window.matchMedia=window.matchMedia||function(doc,undefined){var bool,docElem=do
 
 if(window.console === undefined){console = {log:function(){}};} //Prevent IE console.log Error
 
+var mob = {} || mob;
+
 (function() {
 	var doc = document,
 		sheet = doc.styleSheets;
@@ -51,15 +62,19 @@ if(window.console === undefined){console = {log:function(){}};} //Prevent IE con
 	// define mob object
 	// -----------------
 	mob = {
-		version : '0.4',
+		name : 'mob.js',
+		version : '0.6',
 		defaults : {
 			requestType : "%fx%w.%e",
 			autoStart : true,
 			autoReload : true,
 			retinaSupport : false,
-			offsetHeight : '200px',
-			offsetWidth : '200px',
-			lazyLoad : true
+			offsetHeight : 100,
+			offsetWidth : 100,
+			minHeight : 200,
+			minWidth : 200,
+			lazyLoad : true,
+			alterImg : 'data:image/gif;base64,R0lGODlhEAAKAIAAAAAAAP///yH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS4zLWMwMTEgNjYuMTQ1NjYxLCAyMDEyLzAyLzA2LTE0OjU2OjI3ICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M2IChNYWNpbnRvc2gpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjA0OEUxMDc5QTQ1OTExRTJCRTlEOTI4OUI5NzlDNjhEIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjA0OEUxMDdBQTQ1OTExRTJCRTlEOTI4OUI5NzlDNjhEIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MDQ4RTEwNzdBNDU5MTFFMkJFOUQ5Mjg5Qjk3OUM2OEQiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6MDQ4RTEwNzhBNDU5MTFFMkJFOUQ5Mjg5Qjk3OUM2OEQiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz4B//79/Pv6+fj39vX08/Lx8O/u7ezr6uno5+bl5OPi4eDf3t3c29rZ2NfW1dTT0tHQz87NzMvKycjHxsXEw8LBwL++vby7urm4t7a1tLOysbCvrq2sq6qpqKempaSjoqGgn56dnJuamZiXlpWUk5KRkI+OjYyLiomIh4aFhIOCgYB/fn18e3p5eHd2dXRzcnFwb25tbGtqaWhnZmVkY2JhYF9eXVxbWllYV1ZVVFNSUVBPTk1MS0pJSEdGRURDQkFAPz49PDs6OTg3NjU0MzIxMC8uLSwrKikoJyYlJCMiISAfHh0cGxoZGBcWFRQTEhEQDw4NDAsKCQgHBgUEAwIBAAAh+QQAAAAAACwAAAAAEAAKAAACC4SPqcvtD6OctK4CADs='
 		},
 		scrollTimer : false,
 		__preventEvent : true,
@@ -98,28 +113,43 @@ if(window.console === undefined){console = {log:function(){}};} //Prevent IE con
 			this.refresh();
 		},
 
+
+		// Refresh and register All image Elements
+		// You can call mob.refresh() anywhere.
 		refresh : function () {
 			this.__basket = [];		// Clear Basket Container
-			var temp = doc.getElementsByTagName('img');
+			this.register(doc);
+		},
+
+		// Adding new image elements works with mob.js
+		// @obj = Container Elements has images. 
+		register : function(obj) {
+			var temp = obj.getElementsByTagName('img');
 			for (var i = temp.length;  i--;){
-				var file = temp[i].getAttribute('data-src');
-				if(file !== null){
+				var file = temp[i].getAttribute('data-src'),
+					alterImg = temp[i].src;
+				if (file !== null){
 					temp[i]._file = file.split(/(?:\.([^.]+))?$/);
-					var offsetHeight = temp[i].style.minHeight,
-						offsetWidth = temp[i].style.minWidth;
-					temp[i].style.minHeight = offsetHeight === undefined ? this.config.offsetHeight : offsetHeight;
-					temp[i].style.minWidth = offsetWidth === undefined ? this.config.offsetWidth : offsetWidth;
+					var minHeight = getComputed(temp[i], 'minHeight'),
+						minWidth = getComputed(temp[i], 'minWidth');
+					temp[i].style.minHeight = parseFloat(minHeight) < 1 ? this.config.minHeight + 'px': minHeight;
+					temp[i].style.minWidth = parseFloat(minWidth) < 1 ? this.config.minWidth + 'px' : minWidth;
+					temp[i].src = alterImg === '' ? this.config.alterImg : alterImg;
+					temp[i].style.opacity = 0.2;
 					this.__basket.push(temp[i]);
 				}
 			}
-			this.resetBooks();
+			this.addBooks(true);
 		},
 
 		resetBooks : function() {
+			this.__book = [];			// Clear booked Container
 			this.__preventEvent = toggle(this.__preventEvent);
-			if(this.__preventEvent === false){
-				var count = 0;
-				this.__book = [];			// Clear booked Container
+			this.addBooks(this.__preventEvent);
+		},
+
+		addBooks : function(prevent) {
+			if(prevent){
 				for (var i = this.__basket.length; i--;){
 					var elem = this.__basket[i];
 					var temp = {};
@@ -127,10 +157,9 @@ if(window.console === undefined){console = {log:function(){}};} //Prevent IE con
 						temp._height = getComputed(elem,'height',true),
 						temp._display = getComputed(elem,'display');
 					if((elem._width === undefined || elem._height === undefined || temp._width > elem._width || temp._height > elem._height) && temp._display !== 'none'){
+						elem.position = elem.getBoundingClientRect();
 						elem._width = temp._width,
 						elem._height = temp._height;
-						elem._basketNumber = i;
-						elem._number = count++;
 						this.__book.push(elem);
 					}
 				}
@@ -144,21 +173,26 @@ if(window.console === undefined){console = {log:function(){}};} //Prevent IE con
 				this.__viewportHeight = getViewport('clientHeight');
 				this.__viewportWidth = getViewport('clientWidth');
 				redirection = 'checkPosition';
-			};
-			for (var i = 0; i <= this.__book.length-1; i++) {
-				if(this.__book[i] !== undefined)this[redirection](this.__book[i]);
+				this.bodyRect = document.body.getBoundingClientRect();
 			}
-
+			// console.time('lazyload performance');
+			for (var i = 0; i <= this.__book.length-1; i++) {
+				if(this.__book[i] !== undefined){
+					this[redirection](this.__book[i]);
+				}
+			}
+			// console.timeEnd('lazyload performance');
 			function getViewport(prop){
 				return Math.min(document.body[prop],document.documentElement[prop]);
 			}
 		},
 
 		checkPosition : function(elem){
-			var rect = elem.getBoundingClientRect();
-			if(rect.top <= this.__viewportHeight + 200 && rect.left <= this.__viewportWidth){
+			var position = elem.position,
+				bodyRect = this.bodyRect;
+			setTransition(elem, 'opacity ease 0.6s');
+			if(position.top + bodyRect.top <= this.__viewportHeight && position.left + bodyRect.left <= this.__viewportWidth){
 				this.showElement(elem);
-			}else{
 			}
 		},
 
@@ -166,27 +200,25 @@ if(window.console === undefined){console = {log:function(){}};} //Prevent IE con
 			var request = this.config.requestType,
 				file = elem._file,
 				width = Math.ceil(this.config.DPR * elem._width),
-				height = Math.ceil(this.config.DPR * elem._height);
-			elem.src = request.replace('%f',file[0]).replace('%w',width).replace('%h',height).replace('%e',file[1]);
-
-			setTransition(elem, 'opacity ease 2s');
-			elem.style.opacity = 0;
-			elem.addEventListener('load',function(){mob.setAttribute(this);});
-			elem.addEventListener('error',function(){
-				delete window.mob.__book[this._number];
-				console.log("Can't load - " + this._file[0]+'.'+this._file[1]);
-			});
-
+				height = Math.ceil(this.config.DPR * elem._height),
+				src = request.replace('%f',file[0]).replace('%w',width).replace('%h',height).replace('%e',file[1]);
+			if(elem.src!==src){
+				elem.src = src;
+				elem.addEventListener('load',function(){mob.setAttribute(this);});
+				elem.addEventListener('error',function(e){
+					console.log(e.status + "Can't load - " + this._file[0]+'.'+this._file[1]);
+					var bookIndex = mob.__book.indexOf(elem);
+					if(bookIndex >= 0)mob.__book.splice(bookIndex , 1);
+				});
+			}
 
 		},
 
 		setAttribute : function(elem){
-			setTransition(elem, 'opacity ease 1s');
 			elem.style.opacity = 1;
-			var basketNumber = elem._basketNumber;
-			this.__basket[basketNumber]._height = getComputed(elem,'height', true);
-			this.__basket[basketNumber]._width = getComputed(elem,'width', true);
-			delete this.__book[elem._number];
+			var basketIndex = this.__basket.indexOf(elem);
+			var bookIndex = this.__book.indexOf(elem);
+			if(bookIndex >= 0)this.__book.splice(bookIndex , 1);
 		},
 
 		addMQListener : function(){
@@ -210,8 +242,10 @@ if(window.console === undefined){console = {log:function(){}};} //Prevent IE con
 		// Add Event Handler End of scroll
 		// -------------------------------
 		setShowBooks : function(){
-			clearTimeout(this.scrollTimer);
-			this.scrollTimer = setTimeout(function(){mob.showBooks();},200);
+			if(this.__book.length){
+				clearTimeout(this.scrollTimer);
+				this.scrollTimer = setTimeout(function(){mob.showBooks();},150);
+			}
 		}
 
 	};
@@ -220,12 +254,12 @@ if(window.console === undefined){console = {log:function(){}};} //Prevent IE con
 	// getComputed (@elem, @prop, @isNumber)
 	// returning computedStyle function
 	// @elem = target element object 
-	// @prop = return property string
+	// @prop = property string
 	// @isNumber = boolean for Number format
 	// --------------------------------------------------------
 	function getComputed(elem, prop, isNumber) {
 		var returnValue = window.getComputedStyle(elem)[prop];
-		return returnValue = isNumber === true ? +parseFloat(returnValue) || 0 : returnValue;
+		return returnValue = isNumber === true ? + parseFloat(returnValue) || 0 : returnValue;
 	}
 
 	function bindResetBooks(){
@@ -237,9 +271,8 @@ if(window.console === undefined){console = {log:function(){}};} //Prevent IE con
 	}
 
 	function setTransition(elem,prop){
-		// console.log(prop);
-		elem.style.MozTransition = prop;
 		elem.style.webkitTransition = prop;
+		elem.style.MozTransition = prop;
 		elem.style.msTransition = prop;
 		elem.style.OTransition = prop;
 		elem.style.transition = prop;
@@ -251,4 +284,7 @@ if(window.console === undefined){console = {log:function(){}};} //Prevent IE con
 })();
 =======
 })();
+<<<<<<< HEAD
 >>>>>>> f7d1b2d... mob v0,4
+=======
+>>>>>>> master

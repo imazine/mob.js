@@ -45,7 +45,10 @@
 				(미디어 쿼리가 현재보다 큰 이미지폭을 설정하면 자동으로 이미지를 로드) */
 			retinaSupport : true
 				/*retinaSupport : Boolean
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
 				Detect Retina Display and request double of image width
 				(레티나 디스플레이를 지원) */
 		}  
