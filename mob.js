@@ -15,6 +15,9 @@ window.matchMedia=window.matchMedia||function(doc,undefined){var bool,docElem=do
 
 	Release Note
 
+		v0.61
+			- fix some bugs.
+
 		v0.6
 			- add register API for AJAX workflow.
 
@@ -61,7 +64,7 @@ if(window.console === undefined){console = {log:function(){}};} //Prevent IE con
 	// -----------------
 	mob = {
 		name : 'mob.js',
-		version : '0.6',
+		version : '0.61',
 		defaults : {
 			requestType : "%fx%w.%e",
 			autoStart : true,
