@@ -52,12 +52,10 @@ window.matchMedia=window.matchMedia||function(doc,undefined){var bool,docElem=do
 
 if(window.console === undefined){console = {log:function(){}};} //Prevent IE console.log Error
 
-var mob = {} || mob;
-
-(function() {
+(function(root) {
 	var doc = document,
-		sheet = doc.styleSheets;
-
+		sheet = doc.styleSheets,
+		mob = mob || {};
 	// -----------------
 	// define mob object
 	// -----------------
@@ -278,13 +276,8 @@ var mob = {} || mob;
 		elem.style.transition = prop;
 	}
 
+	root.mob = mob;
+
 	window.addEventListener('load', function(){mob.touch();});
 
-<<<<<<< HEAD
-})();
-=======
-})();
-<<<<<<< HEAD
->>>>>>> f7d1b2d... mob v0,4
-=======
->>>>>>> master
+})(this);
