@@ -56,6 +56,7 @@ window.matchMedia=window.matchMedia||function(doc,undefined){var bool,docElem=do
 if(window.console === undefined){console = {log:function(){}};} //Prevent IE console.log Error
 
 (function(root) {
+	"use strict"
 	var doc = document,
 		sheet = doc.styleSheets,
 		mob = mob || {};
